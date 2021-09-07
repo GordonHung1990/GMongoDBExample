@@ -15,12 +15,15 @@ namespace GMongoDBExample.Domains.Connections.MongoDB
     {
         private readonly MongoDBConfigurationSetting _setting;
         private readonly MongoClient _client;
+
         public MongoDBConnection(IOptions<MongoDBConfigurationSetting> setting)
         {
             _setting = setting.Value;
             var connString = $"mongodb://{_setting.User}:{_setting.Password}@{_setting.Url}:{_setting.Port}";
             _client = new MongoClient(connString);
         }
+
+        MongoClient IMongoDBConnection.MongoClient => _client;
 
         IMongoDatabase IMongoDBConnection.GetMongoDB(string dbName)
            => _client.GetDatabase(dbName);
