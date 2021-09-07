@@ -22,7 +22,6 @@ namespace GMongoDBExample.Domains.Connections.MongoDB
             _client = new MongoClient(connString);
         }
 
-        MongoClient IMongoDBConnection.MongoClient => _client;
         IMongoDatabase IMongoDBConnection.GetMongoDB(string dbName)
            => _client.GetDatabase(dbName);
 
