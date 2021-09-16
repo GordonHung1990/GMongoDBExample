@@ -30,7 +30,7 @@ namespace GMongoDBExample.Controllers
         /// <param name="account">The account.</param>
         /// <returns></returns>
         [HttpGet("{account}")]
-        public ValueTask<PlayersGetResponse> GetAsync(
+        public Task<PlayersGetResponse> GetAsync(
             [FromServices] IPlayersService service,
             string account
             )
@@ -53,7 +53,7 @@ namespace GMongoDBExample.Controllers
         /// <param name="source">The source.</param>
         /// <returns></returns>
         [HttpPost]
-        public ValueTask AddAsync(
+        public Task AddAsync(
             [FromServices] IPlayersService service,
             [FromBody] PlayersAddRequest source
             )
@@ -75,7 +75,7 @@ namespace GMongoDBExample.Controllers
         /// <param name="model">The model.</param>
         /// <returns></returns>
         [HttpPut("{account}/EditName")]
-        public ValueTask EditNameAsync(
+        public Task EditNameAsync(
             [FromServices] IPlayersService service,
             string account,
             [FromBody] PlayersEditNameViewModel model
@@ -102,7 +102,7 @@ namespace GMongoDBExample.Controllers
         /// <param name="model">The model.</param>
         /// <returns></returns>
         [HttpPut("{account}/EditNickName")]
-        public ValueTask EditNickNameAsync(
+        public Task EditNickNameAsync(
             [FromServices] IPlayersService service,
             string account,
             [FromBody] PlayersEditNickNameViewModel model
@@ -125,7 +125,7 @@ namespace GMongoDBExample.Controllers
         /// <param name="account">The account.</param>
         /// <returns></returns>
         [HttpDelete("{account}")]
-        public ValueTask DeleteAsync(
+        public Task DeleteAsync(
             [FromServices] IPlayersService service,
             string account
             )

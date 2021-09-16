@@ -16,11 +16,12 @@ namespace GMongoDBExample.Repositories
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
         }
 
-        async ValueTask IPlayerInfosRepository.AddAsync(PlayerInfos source)
-             => await _connection.GetMongoCollection<PlayerInfos>().InsertOneAsync(source).ConfigureAwait(false);
-        async ValueTask<DeleteResult> IPlayerInfosRepository.DeleteAsync(Guid playerId)
-             => await _connection.GetMongoCollection<PlayerInfos>().DeleteOneAsync(a => a.PlayersId == playerId).ConfigureAwait(false);
-        async ValueTask<UpdateResult> IPlayerInfosRepository.EditNickNameAsync(PlayerInfos source)
+        public Task AddAsync(PlayerInfos source)
+             => _connection.GetMongoCollection<PlayerInfos>().InsertOneAsync(source);
+        public Task<DeleteResult> DeleteAsync(Guid playerId)
+               => _connection.GetMongoCollection<PlayerInfos>().DeleteOneAsync(a => a.PlayersId == playerId);
+
+        public async Task<UpdateResult> EditNickNameAsync(PlayerInfos source)
         {
             var collection = _connection.GetMongoCollection<PlayerInfos>();
             var filter = Builders<PlayerInfos>.Filter.Eq(a => a.Id, source.Id);
@@ -30,7 +31,8 @@ namespace GMongoDBExample.Repositories
 
             return await collection.UpdateOneAsync(filter, update).ConfigureAwait(false);
         }
-        async ValueTask<PlayerInfos> IPlayerInfosRepository.GetAsync(Guid playerId)
+
+        public async Task<PlayerInfos> GetAsync(Guid playerId)
         {
             var cursor = await _connection.GetMongoCollection<PlayerInfos>().FindAsync(a => a.PlayersId == playerId).ConfigureAwait(false);
             return cursor.FirstOrDefault();

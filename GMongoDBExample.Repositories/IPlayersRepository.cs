@@ -6,9 +6,9 @@ namespace GMongoDBExample.Repositories
 {
     public interface IPlayersRepository
     {
-        ValueTask AddAsync(Players source);
-        ValueTask<UpdateResult> EditNameAsync(Players source);
-        ValueTask<DeleteResult> DeleteAsync(string account);
-        ValueTask<Players> GetAsync(string account);
+        Task AddAsync(Players source);
+        Task<UpdateResult> EditNameAsync(Players source);
+        Task<DeleteResult> DeleteAsync(string account);
+        Task<Players> GetAsync(string account);
     }
 }

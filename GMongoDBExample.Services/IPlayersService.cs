@@ -5,10 +5,10 @@ namespace GMongoDBExample.Services
 {
     public interface IPlayersService
     {
-        ValueTask AddAsync(PlayersAddRequest source);
-        ValueTask EditNameAsync(PlayersEditNameRequest source);
-        ValueTask EditNickNameAsync(PlayersEditNickNameRequest source);
-        ValueTask<PlayersGetResponse> GetAsync(string account);
-        ValueTask DeleteAsync(string account);
+        Task AddAsync(PlayersAddRequest source);
+        Task EditNameAsync(PlayersEditNameRequest source);
+        Task EditNickNameAsync(PlayersEditNickNameRequest source);
+        Task<PlayersGetResponse> GetAsync(string account);
+        Task DeleteAsync(string account);
     }
 }

@@ -6,7 +6,7 @@ using GMongoDBExample.Repositories.Models;
 
 namespace GMongoDBExample.Services
 {
-    public record PlayersService : IPlayersService
+    internal sealed class PlayersService : IPlayersService
     {
         public readonly IPlayersRepository _playersRepository;
         public readonly IPlayerInfosRepository _playerInfosRepository;
@@ -19,7 +19,8 @@ namespace GMongoDBExample.Services
             _playersRepository = playersRepository ?? throw new ArgumentNullException(nameof(playersRepository));
             _playerInfosRepository = playerInfosRepository ?? throw new ArgumentNullException(nameof(playerInfosRepository));
         }
-        async ValueTask IPlayersService.AddAsync(PlayersAddRequest source)
+
+        public async Task AddAsync(PlayersAddRequest source)
         {
             var get = await _playersRepository.GetAsync(source.Account).ConfigureAwait(false);
             if (get != null)
@@ -45,7 +46,8 @@ namespace GMongoDBExample.Services
             };
             await _playerInfosRepository.AddAsync(playerInfo).ConfigureAwait(false);
         }
-        async ValueTask IPlayersService.EditNameAsync(PlayersEditNameRequest source)
+
+        public async Task EditNameAsync(PlayersEditNameRequest source)
         {
             var player = await _playersRepository.GetAsync(source.Account).ConfigureAwait(false);
             if (player == null)
@@ -55,7 +57,8 @@ namespace GMongoDBExample.Services
             player.Name = source.Name;
             await _playersRepository.EditNameAsync(player).ConfigureAwait(false);
         }
-        async ValueTask IPlayersService.EditNickNameAsync(PlayersEditNickNameRequest source)
+
+        public async Task EditNickNameAsync(PlayersEditNickNameRequest source)
         {
             var player = await _playersRepository.GetAsync(source.Account).ConfigureAwait(false);
             if (player == null)
@@ -66,7 +69,8 @@ namespace GMongoDBExample.Services
             playerInfo.NickName = source.NickName;
             await _playerInfosRepository.EditNickNameAsync(playerInfo).ConfigureAwait(false);
         }
-        async ValueTask<PlayersGetResponse> IPlayersService.GetAsync(string account)
+
+        public async Task<PlayersGetResponse> GetAsync(string account)
         {
             var player = await _playersRepository.GetAsync(account).ConfigureAwait(false);
             if (player == null)
@@ -84,15 +88,16 @@ namespace GMongoDBExample.Services
                 ModifiedDate = player.ModifiedDate
             };
         }
-        async ValueTask IPlayersService.DeleteAsync(string account)
+
+        public async Task DeleteAsync(string account)
         {
             var player = await _playersRepository.GetAsync(account).ConfigureAwait(false);
             if (player == null)
             {
                 throw new("Player does not exist");
             }
-            var taskPlayer = _playersRepository.DeleteAsync(account).AsTask();
-            var taskPlayerInfo = _playerInfosRepository.DeleteAsync(player.Id).AsTask();
+            var taskPlayer = _playersRepository.DeleteAsync(account);
+            var taskPlayerInfo = _playerInfosRepository.DeleteAsync(player.Id);
 
             Task.WaitAll(new Task[] { taskPlayer, taskPlayerInfo });
         }
